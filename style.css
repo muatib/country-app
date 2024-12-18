@@ -120,6 +120,7 @@ input[type="range"] {
 .theme-switch {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 10px 20px;
   border: none;
@@ -128,6 +129,8 @@ input[type="range"] {
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
+  width: 200px;
+  margin-left: 10%;
 }
 
 .theme-switch:hover {

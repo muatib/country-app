@@ -35,8 +35,8 @@ async function fetchCountries() {
 function displayError() {
     countriesContainer.innerHTML = `
         <div class="error-message">
-            <h2>Failed to load countries data</h2>
-            <p>Please try again later</p>
+            <h2>Impossible de charger les données des pays</h2>
+            <p>Veuillez essayer plus tard</p>
         </div>
     `;
 }
@@ -89,11 +89,11 @@ function createCountryCard(country) {
             <p>Population: ${population.toLocaleString()}</p>
             <div class="card-links">
                 <a href="${maps.googleMaps}" target="_blank" class="country-link">
-                    <i class="fas fa-map-marker-alt"></i> View on Google Maps
+                    <i class="fas fa-map-marker-alt"></i> Voir sur Google Maps
                 </a>
                 <a href="https://www.google.com/search?q=${encodeURIComponent(countryName)}" 
                    target="_blank" class="country-link">
-                    <i class="fas fa-search"></i> Learn more
+                    <i class="fas fa-search"></i> En savoir plus
                 </a>
             </div>
         </div>
@@ -115,10 +115,10 @@ function countriesDisplay() {
 
 /**
  * Updates the theme button text based on current theme
- * @param {string} theme - Current theme ('dark' or 'light')
+ * @param {boolean} isDark - Whether the theme is dark
  */
-function updateThemeButton(theme) {
-    themeSwitch.textContent = theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
+function updateThemeButton(isDark) {
+    themeSwitch.textContent = isDark ? '☀️ Mode clair' : '🌙 Mode sombre';
 }
 
 /**
@@ -126,11 +126,11 @@ function updateThemeButton(theme) {
  */
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    const isDark = currentTheme === 'dark';
     
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeButton(newTheme);
+    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+    localStorage.setItem('theme', isDark ? '' : 'dark');
+    updateThemeButton(!isDark);
 }
 
 /**
@@ -138,10 +138,15 @@ function toggleTheme() {
  */
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
-    const theme = savedTheme || (prefersDarkScheme.matches ? 'dark' : 'light');
+    const prefersDark = prefersDarkScheme.matches;
     
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeButton(theme);
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateThemeButton(true);
+    } else {
+        document.documentElement.setAttribute('data-theme', '');
+        updateThemeButton(false);
+    }
 }
 
 /**
